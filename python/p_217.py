@@ -12,12 +12,6 @@ def groupAnagrams(strs: list[str]) -> list[list[str]]:
             
     return h_map.values()
 
-
-
-    
-
-
-
 strs = ["act","pots","tops","cat","stop","hat"]
 out = groupAnagrams(strs)
 print(out)
