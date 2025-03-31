@@ -1,0 +1,8 @@
+{
+    "rust-analyzer.runnables.extraEnv": {
+        "PATH": "${env:HOME}/.cargo/bin:${env:PATH}"
+    },
+    "rust-analyzer.linkedProjects": [
+        "/home/sjadmin/Projects/leetcode/rust/Cargo.toml",
+    ],
+}
