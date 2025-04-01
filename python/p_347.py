@@ -2,14 +2,11 @@ class Solution(object):
     def topKFrequent(self, nums, k):
 
         h_map = {}
-
-        for idx, n in enumerate(nums):
-            
+        for n in nums:
             if n in h_map:
                 h_map[n] += 1
             else:
                 h_map[n] = 1
-            
         
         h_map = sorted(h_map.items(), key=lambda x: x[1], reverse=True)[:k]
 
@@ -18,7 +15,6 @@ class Solution(object):
             new_map.append(a)
 
         return new_map
-        # return h_map
 
 
 
