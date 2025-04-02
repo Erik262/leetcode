@@ -5,4 +5,5 @@
     "rust-analyzer.linkedProjects": [
         "/home/sjadmin/Projects/leetcode/rust/Cargo.toml",
     ],
+    "github.copilot.nextEditSuggestions.enabled": false,
 }
