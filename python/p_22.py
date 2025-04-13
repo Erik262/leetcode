@@ -1,20 +1,27 @@
 class Solution:
     def generateParenthesis(self, n: int) -> list[str]:
-        pt = "()" * n
-        perm = 1
+        stack = []
+        result = []
 
-        for i in range(1, n + 1):
-            perm *= i
+        def recursive(n_open, n_closed):
+            if n_open == n_closed == n:
+                result.append("".join(stack))
+                return
+            
+            if n_open < n:
+                stack.append("(")
+                recursive(n_open + 1, n_closed)
+                stack.pop()
 
+            if n_closed < n_open:
+                stack.append(")")
+                recursive(n_open, n_closed + 1)
+                stack.pop()
 
-        for i in perm:
-            pass
+        recursive(0,0)
 
-
-
-
-
-
+        return result
+        
 # n = 1
 # Output: ["()"]
 
