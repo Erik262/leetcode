@@ -31,10 +31,6 @@ class Solution:
             prev = hmap[c]
             
         return amount
-                
-
-
-
 
 s = "III" # 3
 s = "LVIII" # 58
