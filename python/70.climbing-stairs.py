@@ -7,14 +7,19 @@
 # @lc code=start
 class Solution:
     def climbStairs(self, n: int) -> int:
-        one, two = 1, 1
+        cache = [-1] * n
 
-        for i in range(n - 1):
-            tmp = one
-            one = one + two
-            two = tmp
+        def dfs(i: int):
+            if i >= n:
+                return i == n
 
-        return one
+            if cache[i] != -1:
+                return cache[i]
+
+            cache[i] = dfs(i + 1) + dfs(i + 2)
+            return cache[i]
+
+        return dfs(0)
 
 
 n = 2 # 2
