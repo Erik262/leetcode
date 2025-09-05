@@ -7,18 +7,19 @@ from typing import List
 # @lc code=start
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        memory = [-1] * len(cost) # saves costs!
+        cache = [-1] * len(cost)
 
-        def dfs(pos: int):
-            if pos >= len(cost):
+        def dfs(i: int):
+            if i >= len(cost):
                 return 0
+
+            if cache[i] != -1:
+                return cache[i]
+
+            cache[i] = cost[i] + min(dfs(i + 1), dfs(i + 2))
             
-            if memory[pos] != -1:
-                return memory[pos]
-            
-            memory[pos] = cost[pos] + min(dfs(pos + 1), dfs(pos + 2))
-            return memory[pos]
-        
+            return cache[i]
+
         return min(dfs(0), dfs(1))
 
 # cost = [10,15,20] # 15
