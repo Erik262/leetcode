@@ -7,20 +7,14 @@ from typing import List
 # @lc code=start
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        memory = [-1] * len(nums)
+        r1, r2 = 0, 0
 
-        def dfs(i):
-            if i >= len(nums):
-                return 0
-            
-            if memory[i] != -1:
-                return memory[i]
-            
-            memory[i] = max(dfs(i + 1), nums[i] + dfs(i + 2))
+        for house in nums:
+            tmp = max(r1 + house, r2)
+            r1 = r2
+            r2 = tmp
 
-            return memory[i]
-        
-        return dfs(0)
+        return r2
 
 
 nums = [1,1,3,3] # 4
