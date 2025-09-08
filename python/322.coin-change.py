@@ -1,5 +1,4 @@
 from typing import List
-import math
 # @lc app=leetcode id=322 lang=python3
 #
 # [322] Coin Change
@@ -8,15 +7,30 @@ import math
 # @lc code=start
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        hmap = [math.inf] * (amount + 1)
-        hmap[0] = 0
+        memo = {}
 
-        for i in range (1, amount + 1):
+        def dfs(rem: int):
+            if rem == 0:
+                return 0
+            
+            if rem < 0:
+                return float('inf')
+
+            if rem in memo:
+                return memo[rem]
+
+            best = float('inf')
             for c in coins:
-                if i - c >= 0:
-                    hmap[i] = min(hmap[i], 1 + hmap[i - c])
-        
-        return hmap[amount] if hmap[amount] != math.inf else -1
+                sub = dfs(rem - c)
+
+                if sub != float('inf'):
+                    best = min(best, sub + 1)
+            
+            memo[rem] = best
+            return best
+
+        result = dfs(amount)
+        return -1 if result == float('inf') else result
         
 
 coins = [1,5,10] # 3
