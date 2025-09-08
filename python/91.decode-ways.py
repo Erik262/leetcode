@@ -7,19 +7,29 @@
 # @lc code=start
 class Solution:
     def numDecodings(self, s: str) -> int:
-        hmap = {len(s): 1}
+        memo = [-1] * (len(s) + 1)
 
-        for i in range(len(s) - 1, -1, -1): # reverse
-            if s[i] == "0":
-                hmap[i] = 0
-            else:
-                hmap[i] = hmap[i+1]
+        def dfs(i: int):
+            if i >= len(s):
+                return 1
+            
+            if s[i] == '0':
+                return 0
 
+            if memo[i] != -1:
+                return memo[i]
 
-            if i + 1 < len(s) and (s[i] == "1" or s[i] == "2" and s[i+1] in "0123456"):
-                hmap[i] += hmap[i+2]
+            # one step
+            ways = dfs(i + 1)
+            
+            # two steps
+            if i + 1 < len(s) and '10' <= s[i:i+2] <= '26':
+                ways += dfs(i + 2)
 
-        return hmap[0]
+            memo[i] = ways
+            return ways
+
+        return dfs(0)
 
 
 s = "226" #3
