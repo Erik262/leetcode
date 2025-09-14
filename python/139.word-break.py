@@ -8,23 +8,27 @@ from collections import deque
 # @lc code=start
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        dp = [False] * (len(s) + 1)
-        dp[-1] = True
+        words = set(wordDict)
+        n = len(s)
+        memo = {}
 
-        for i in range(len(s) - 1, -1, -1):
-            for word in wordDict:
-                if s[i: i + len(word)] == word and (i + len(word)) <= len(s):
-                    dp[i] = dp[i + len(word)]
+        def dfs(i: int) -> bool:
+            if i in memo:
+                return memo[i]
 
-                if dp[i]:
-                    break
+            if i == n:
+                return True
 
-        return dp[0]
+            for j in range(i + 1, n + 1):
+                if s[i:j] in words and dfs(j):
+                    
+                    memo[i] = True
+                    return True
 
+            memo[i] = False
+            return False
 
-        
-
-
+        return dfs(0)
 
 s = "neetcode"
 wordDict = ["neet","code"] # True
