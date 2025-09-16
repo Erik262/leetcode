@@ -8,15 +8,35 @@ from collections import defaultdict
 # @lc code=start
 class Solution:
     def findTargetSumWays(self, nums: List[int], target: int) -> int:
-        dp = [defaultdict(int) for i in range(len(nums) + 1)]
-        dp[0][0] = 1
+        n = len(nums)
+        memo = {}
 
-        for i in range(len(nums)):
-            for total, count in dp[i].items():
-                dp[i + 1][total + nums[i]] += count           
-                dp[i + 1][total - nums[i]] += count           
+        # prunning
+        rem = [0] * (n + 1)
+        for i in range(n - 1, -1, -1):
+            rem[i] = rem[i + 1] + nums[i]
 
-        return dp[len(nums)][target]
+        def dfs(i: int, amount: int):
+            if abs(target - amount) > rem[i]:
+                return 0
+
+            if i == n:
+                if amount == target:
+                    return 1
+                else:
+                    return 0
+
+            if (i, amount) in memo:
+                return memo[(i, amount)]
+
+            add = dfs(i + 1, amount + nums[i])
+            sub = dfs(i + 1, amount - nums[i])
+
+            memo[(i, amount)] = add + sub
+
+            return memo[(i, amount)]
+
+        return dfs(0, 0)
 
 
 nums = [2,2,2] # 3
