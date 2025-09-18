@@ -7,26 +7,34 @@
 # @lc code=start
 class Solution:
     def minDistance(self, word1: str, word2: str) -> int:
+        memo = {}
         w1, w2 = len(word1), len(word2)
 
-        if w1 < w2: # we want to loop over the largest one w1
-            w1, w2 = w2, w1
-            word1, word2 = word2, word1
+        def dfs(i: int, j:int):
+            # end
+            if i == w1:
+                return w2 - j
+            
+            if j == w2:
+                return w1 - i
 
-        dp = [w2 - i for i in range(w2 + 1)]
+            if (i, j) in memo:
+                return memo[(i, j)]
 
-        for i in range(w1 - 1, -1, -1):
-            dp_next = dp[w2]
-            dp[w2] = w1 - i
-            for j in range(w2 - 1, -1, -1):
-                temp = dp[j]
-                if word1[i] == word2[j]:
-                    dp[j] = dp_next
-                else:
-                    dp[j] = 1 + min(dp[j], dp[j + 1], dp_next)
-                dp_next = temp
+            # edits
+            if word1[i] != word2[j]:
+                insert = 1 + dfs(i, j + 1)
+                delete = 1 + dfs(i + 1, j)
+                replace = 1 + dfs(i + 1, j + 1)
 
-        return dp[0]
+                memo[(i, j)] = min(insert, delete, replace)
+                return memo[(i, j)]
+
+            else:
+                memo[(i, j)] = dfs(i + 1, j + 1)
+                return memo[(i, j)]
+
+        return dfs(0, 0)
 
 
 
