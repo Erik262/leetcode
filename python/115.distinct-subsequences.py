@@ -7,25 +7,29 @@
 # @lc code=start
 class Solution:
     def numDistinct(self, s: str, t: str) -> int:
-        hmap = {}
+        n, m = len(s), len(t)
+        memo = {}
 
-        def dfs(i, j):
-            if j == len(t):
-                return 1
-            
-            if i == len(s):
+        def dfs(i: int, j: int):
+            if n - i < m - j:
                 return 0
-            
-            if (i, j) in hmap:
-                return hmap[(i, j)]
-            
+
+            if j >= m:
+                return 1
+
+            if i >= n:
+                return 0
+
+            if (i, j) in memo:
+                return memo[(i, j)]
+
             if s[i] == t[j]:
-                hmap[(i, j)] = dfs(i + 1, j + 1) + dfs(i + 1, j)
+                memo[(i, j)] = dfs(i + 1, j + 1) + dfs(i + 1, j)
             else:
-                hmap[(i, j)] = dfs(i + 1, j)
-            
-            return hmap[(i, j)]
-        
+                memo[(i, j)] = dfs(i + 1, j)
+
+            return memo[(i, j)]
+
         return dfs(0, 0)
             
 s = "caaat" # 3
