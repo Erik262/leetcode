@@ -5,7 +5,7 @@ class Solution(object):
 
         prefix = 1
         for i in range(len(nums)):
-            arr[i] = prefix
+            arr[i] *= prefix
             prefix *= nums[i]
 
         postfix = 1
