@@ -1,28 +1,23 @@
 class Solution(object):
     def isValidSudoku(self, board):
-        
         rows = [set() for _ in range(9)]
         cols = [set() for _ in range(9)]
         boxes = [set() for _ in range(9)]
 
-        for i in range(9):
-            for j in range(9):
-                cell = board[i][j] # i = row, j = col
-                if cell == ".":
+        for r in range(9):
+            for c in range(9):
+                box_id = (r // 3) * 3 + (c // 3)
+                digit = board[r][c]
+
+                if digit == '.':
                     continue
-
-                # Check for boxes
-                box_idx = (i // 3) * 3 + (j // 3) # / = with float, // with rounding
-                if cell in boxes[box_idx]:
+                    
+                if digit in rows[r] or digit in cols[c] or digit in boxes[box_id]:
                     return False
 
-                # Check for rows and cols
-                if (cell in rows[i]) or (cell in cols[j]):
-                    return False
-                
-                rows[i].add(cell)
-                cols[j].add(cell)
-                boxes[box_idx].add(cell)
+                rows[r].add(digit)
+                cols[c].add(digit)
+                boxes[box_id].add(digit)
 
         return True
 
