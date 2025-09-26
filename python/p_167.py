@@ -1,19 +1,16 @@
 class Solution:
     def twoSum(self, numbers, target):
-        l_idx = 0
-        r_idx = len(numbers) - 1
+        left, right = 0, len(numbers) - 1
 
-        while l_idx < r_idx:
-            l_v = numbers[l_idx]
-            r_v = numbers[r_idx]
+        while left < right:
+            res = numbers[left] + numbers[right]
 
-            if (l_v + r_v == target):
-                return [l_idx + 1, r_idx + 1]
-
-            if (l_v + r_v) > target:
-                r_idx -= 1
+            if res < target:
+                left += 1
+            elif res > target:
+                right -= 1
             else:
-                l_idx += 1
+                return [left + 1, right + 1]
 
 
 
