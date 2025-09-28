@@ -1,27 +1,26 @@
 class Solution(object):
     def trap(self, height):
-
-        l_idx = 0
-        r_idx = len(height) - 1
-        liter = 0
-        l_max = 0
-        r_max = 0
+        l_idx, r_idx = 0, len(height) - 1
+        l_max, r_max = 0, 0
+        result = 0
 
         while l_idx < r_idx:
-            if height[l_idx] < height[r_idx]:
+            if height[l_idx] <= height[r_idx]:
                 if height[l_idx] < l_max:
-                    liter += l_max - height[l_idx]
+                    result += l_max - height[l_idx]
                 else:
                     l_max = height[l_idx]
+
                 l_idx += 1
             else:
                 if height[r_idx] < r_max:
-                    liter += r_max - height[r_idx]
+                    result += r_max - height[r_idx]
                 else:
                     r_max = height[r_idx]
+
                 r_idx -= 1
 
-        return liter
+        return result
 
 
 height = [0,2,0,3,1,0,1,3,2,1] # 9
