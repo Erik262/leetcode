@@ -1,17 +1,19 @@
 class Solution(object):
     def lengthOfLongestSubstring(self, s):
-        c_set = set()
-        wl = 0
+        hmap = {}
         l = 0
+        best = 0
 
         for r in range(len(s)):
-            while s[r] in c_set:
-                c_set.remove(s[l])
-                l += 1
-            c_set.add(s[r])
-            wl = max(wl, len(c_set))
+            if s[r] in hmap and hmap[s[r]] >= l:
+                l = hmap[s[r]] + 1
+            
+            tmp_best = r - l + 1
+            best = max(tmp_best, best)
 
-        return wl
+            hmap[s[r]] = r
+
+        return best
 
         
 s = "zxyzxyz" # 3
