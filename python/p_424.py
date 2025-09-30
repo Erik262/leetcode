@@ -1,19 +1,22 @@
+from collections import defaultdict
 class Solution(object):
     def characterReplacement(self, s, k):
-        h_map = {}
-        result = 0
         l = 0
+        freq_map = defaultdict(int)
+        max_freq = 0
+        best = 0
 
         for r in range(len(s)):
-            h_map[s[r]] = h_map.get(s[r], 0) + 1
+            freq_map[s[r]] += 1
+            max_freq = max(max_freq, freq_map[s[r]])
 
-            while ((r - l + 1) - max(h_map.values())) > k:
-                h_map[s[l]] -= 1
+            if (r - l + 1) - max_freq > k:
+                freq_map[s[l]] -= 1
                 l += 1
 
-            result = max(result, (r - l + 1))
+            best = max(best, r - l + 1)
 
-        return result
+        return best
 
 
 s = "AABABBA"
