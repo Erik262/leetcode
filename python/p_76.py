@@ -1,46 +1,39 @@
+from collections import defaultdict, Counter
+
 class Solution:
     def minWindow(self, s, t):
-        if len(t) > len(s):
-            return ""
-        
-        if t == "":
-            return ""
-        
-        t_map = {}
-        slid_window = {}
-
-        for c in t:
-            t_map[c] = t_map.get(c, 0) + 1
-
-        have = 0 
-        need = len(t_map)
-        result = [-1, -1]
-        result_len = float("infinity")
-
+        need = Counter(t)
+        have = defaultdict(int)
+        required = len(need)
+        formed = 0
         l = 0
+        best_len = float('inf')
+        best = (-1, -1)
 
-        for r in range(len(s)):
-            c = s[r]
-            slid_window[c] = slid_window.get(c, 0) + 1
+        for r, ch in enumerate(s):
+            if ch in need:
+                have[ch] += 1
 
-            if c in t_map and slid_window[c] == t_map[c]:
-                have += 1
+                if have[ch] == need[ch]:
+                    formed += 1
 
-            while have == need:
-                if (r - l + 1) < result_len:
-                    result_len = (r - l + 1)
-                    result = [l,r]
-                slid_window[s[l]] -= 1
+            while required == formed:
+                if r - l + 1 < best_len:
+                    best_len = r - l + 1
+                    best = (l, r)
 
-                if s[l] in t_map and slid_window[s[l]] < t_map[s[l]]:
-                    have -= 1
+                if s[l] in need:
+                    have[s[l]] -= 1
+
+                    if have[s[l]] < need[s[l]]:
+                        formed -= 1
 
                 l += 1
 
-        if result_len != float("infinity"):
-            return s[result[0]: result[1] + 1]
-        else:
+        if best[0] == -1:
             return ""
+        
+        return s[best[0]:best[1] + 1]
 
 s = "ADOBECODEBANC" # "BABC"
 t = "ABC"
