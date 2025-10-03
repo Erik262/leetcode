@@ -1,24 +1,20 @@
 class Solution:
     def generateParenthesis(self, n: int) -> list[str]:
-        stack = []
+        stack = [("", n, n)]
         result = []
 
-        def recursive(n_open, n_closed):
-            if n_open == n_closed == n:
-                result.append("".join(stack))
-                return
+        while stack:
+            curr, open_left, close_left = stack.pop()
+
+            if open_left == 0 and close_left == 0:
+                result.append(curr)
+                continue
+
+            if open_left > 0:
+                stack.append((curr + "(", open_left - 1, close_left))
             
-            if n_open < n:
-                stack.append("(")
-                recursive(n_open + 1, n_closed)
-                stack.pop()
-
-            if n_closed < n_open:
-                stack.append(")")
-                recursive(n_open, n_closed + 1)
-                stack.pop()
-
-        recursive(0,0)
+            if close_left > open_left:
+                stack.append((curr + ")", open_left, close_left - 1))
 
         return result
         
