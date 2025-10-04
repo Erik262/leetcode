@@ -7,12 +7,49 @@
 # @lc code=start
 class Solution:
     def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:
-        merged = sorted(nums1 + nums2)
-        n = len(merged)
-        mid = n // 2
-        if n % 2:
-            return merged[mid]
-        return (merged[mid - 1] + merged[mid]) / 2
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+
+        m, n = len(nums1), len(nums2)
+        half = (m + n + 1) // 2
+
+        low, high = 0, m
+        while low <= high:
+            i = (low + high) // 2
+            j = half - i
+
+            if i == 0:
+                max_left_1 = float("-inf")
+            else:
+                max_left_1 = nums1[i-1]
+
+            if i == m:
+                min_right_1 = float("inf")
+            else:
+                min_right_1 = nums1[i]
+
+            if j == 0:
+                max_left_2 = float("-inf")
+            else:
+                max_left_2 = nums2[j-1]
+
+            if j == n:
+                min_right_2 = float("inf")
+            else:
+                min_right_2 = nums2[j]
+
+            if max_left_1 <= min_right_2 and max_left_2 <= min_right_1:
+                left_max = max(max_left_1, max_left_2)
+                if (m + n) % 2 == 1:
+                    return float(left_max)
+
+                right_min = min(min_right_1, min_right_2)
+                return (left_max + right_min) / 2.0
+                
+            elif max_left_1 > min_right_2:
+                high = i - 1
+            else:
+                low = i + 1
 
 nums1 = [123, 2459, 789] # 270
 nums2 = [240, 300, 13]
