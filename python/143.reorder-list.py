@@ -15,39 +15,36 @@ class Solution:
         slow = head
         fast = head
 
+        # Find mid of list
         while fast and fast.next:
             slow = slow.next
             fast = fast.next.next
-
-        # reverse second half list
+        
         second = slow.next
-        prev = None
         slow.next = None
+
+        # Reverse list
+        prev = None
+        curr = second
+        while curr:
+            nxt = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nxt
+
+        # Weave both lists
+        first, second = head, prev
         while second:
-            _second_next = second.next
-            second.next = prev
-            prev = second
-            second = _second_next
-            
-        # merge both together
-        first = head
-        second = prev
-        while second:
-            _first_next = first.next
-            _second_next = second.next
+            fnext = first.next
+            snext = second.next
 
             first.next = second
-            second.next = _first_next
+            second.next = fnext
 
-            first = _first_next
-            second = _second_next
-
-        # while head:
-        #     print(head.val)
-        #     head = head.next
+            first = fnext
+            second = snext
 
         
-
 def list_to_linkedlist(items: List[int]) -> Optional[ListNode]:
     if not items:
         return None
