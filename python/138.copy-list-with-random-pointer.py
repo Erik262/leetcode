@@ -13,38 +13,28 @@ class Node:
         self.next = next
         self.random = random
 
-
 class Solution:
     def copyRandomList(self, head: Optional[Node]) -> Optional[Node]:
-        dummy = Node(x=0,next=head,random=None)
+        if not head:
+            return None
 
-        _head = head
-        while _head:
-            org_next = _head.next
-            new_node = Node(x=_head.val)
-            _head.next = new_node # insert cloned in our list kinda a 'zip'
-            new_node.next = org_next
-            _head = new_node.next
+        old_to_new = {}
 
+        # Pass 1: clone nodes only (val), map originals to clones
         curr = head
         while curr:
-            if curr.random:
-                curr.next.random = curr.random.next # curr.next is our clone
-            curr = curr.next.next # skip clone node
-
-        curr = head
-        copy_ = dummy
-        while curr:
-            copy = curr.next
-            curr.next = copy.next # skipping over our copy/clone
-            copy_.next = copy
-            copy_ = copy
-            
+            old_to_new[curr] = Node(curr.val)
             curr = curr.next
 
-        return dummy.next
+        # Pass 2: wire next & random using the map
+        curr = head
+        while curr:
+            clone = old_to_new[curr]
+            clone.next = old_to_new.get(curr.next)
+            clone.random = old_to_new.get(curr.random)
+            curr = curr.next
 
-
+        return old_to_new[head]
 
 
 def list_to_ll(data: List[List[Optional[int]]]) -> Optional[Node]:
