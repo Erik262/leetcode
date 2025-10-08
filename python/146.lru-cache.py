@@ -7,63 +7,61 @@
 # @lc code=start
 
 class ListNode:
-    def __init__(self, key=0, val=0, prev=None, next=None):
+    def __init__(self, key=0, value=0, prev=None, next=None):
         self.key = key
-        self.val = val
-        self.next = next
+        self.value = value
         self.prev = prev
+        self.next = next
 
 class LRUCache:
     def __init__(self, capacity: int):
-        self.capacity = capacity
-        self.cache = {}
-
+        self.cap = capacity
+        self.map = {}
         self.head = ListNode()
         self.tail = ListNode()
 
         self.head.next = self.tail
         self.tail.prev = self.head
 
-    
-    def _add_to_front(self, node: ListNode) -> None:
-        node.prev = self.head
+    def _add_front(self, node: ListNode):
         node.next = self.head.next
+        node.prev = self.head
 
         self.head.next.prev = node
         self.head.next = node
 
-    def _remove_node(self, node: ListNode) -> None:
+    def _remove(self, node: ListNode):
         node.prev.next = node.next
         node.next.prev = node.prev
 
-    def _remove_from_tail(self) -> ListNode:
-        removed_node = self.tail.prev
-        self._remove_node(self.tail.prev)
+    def _pop_back(self) -> ListNode:
+        popped = self.tail.prev
+        self._remove(popped)
 
-        return removed_node
-
+        return popped
+        
     def get(self, key: int) -> int:
-        if key in self.cache:
-            node = self.cache[key]
-            self._remove_node(node)
-            self._add_to_front(node)
-
-            return node.val
-        else:
+        if key not in self.map:
             return -1
 
+        node = self.map[key]
+        self._remove(node)
+        self._add_front(node)
+
+        return node.value
+
     def put(self, key: int, value: int) -> None:
-        if key in self.cache:
-            self._remove_node(self.cache[key])
-            del self.cache[key]
+        if key in self.map:
+            self._remove(self.map[key])
+            del self.map[key]
 
-        if len(self.cache) >= self.capacity:
-            rev_node = self._remove_from_tail()
-            del self.cache[rev_node.key]
-
-        node = ListNode(key,value)
-        self._add_to_front(node)
-        self.cache[key] = node
+        if len(self.map) >= self.cap:
+            popped_node = self._pop_back()
+            del self.map[popped_node.key]
+        
+        node = ListNode(key, value)
+        self._add_front(node)
+        self.map[key] = node
 
 
 # Input: ["LRUCache", [2], "put", [1, 10],  "get", [1], "put", [2, 20], "put", [3, 30], "get", [2], "get", [1]]
