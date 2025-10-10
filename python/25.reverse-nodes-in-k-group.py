@@ -6,48 +6,49 @@ from typing import Optional, List
 
 # @lc code=start
 # Definition for singly-linked list.
+# Definition for singly-linked list.
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
-
 class Solution:
+    def has_k(self, group_head: Optional[ListNode], k: int):
+        curr = group_head
+        for _ in range(k):
+            if curr is None:
+                return False, None
+            curr = curr.next
+        return True, curr
+
+    def reverse_segment(self, start, tail_next):
+        prev = tail_next
+        curr = start
+        while curr != tail_next:
+            nxt = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nxt
+
+        return prev, start
+
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        dummy = ListNode(0)
-        dummy.next = head
-        group = dummy
+        dummy = ListNode(0, head)
+        prev_group_tail = dummy
+        group_head = head
 
         while True:
-            curr = self.check_k_nodes(group.next, k)
-            if not curr:
+            has_full, tail_next = self.has_k(group_head, k)
+            if not has_full:
                 break
+            
+            new_head, new_tail = self.reverse_segment(group_head, tail_next)
+            prev_group_tail.next = new_head
+            new_tail.next = tail_next
 
-            group_start = group.next
-            group_end = curr
-            next_group_start = curr.next
-
-            # reverse
-            prev = next_group_start
-            curr = group_start
-            while curr != next_group_start:
-                tmp = curr.next
-                curr.next = prev
-                prev = curr
-                curr = tmp
-
-            temp = group.next
-            group.next = group_end
-            temp.next = next_group_start
-            group = temp
+            prev_group_tail = new_tail
+            group_head = tail_next
 
         return dummy.next
-
-
-    def check_k_nodes(self, curr, k):
-        while curr and k > 1:
-            curr = curr.next
-            k -= 1
-        return curr
 
 
 
