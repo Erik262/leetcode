@@ -25,13 +25,10 @@ class Solution:
             self.pre_pos += 1
 
             node = TreeNode(root)
-            mid = val_to_index[node.val]
+            mid = val_to_index[root]
 
-            left_tree = dfs(l, mid)
-            right_tree = dfs(mid + 1, r)
-
-            node.left = left_tree
-            node.right = right_tree
+            node.left = dfs(l, mid)
+            node.right = dfs(mid + 1, r)
 
             return node
         
