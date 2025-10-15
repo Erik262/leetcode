@@ -1,6 +1,6 @@
 from typing import List
 import heapq
-from collections import Counter, deque
+from collections import Counter
 # @lc app=leetcode id=621 lang=python3
 #
 # [621] Task Scheduler
@@ -10,24 +10,23 @@ from collections import Counter, deque
 class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
 
-        cnt = Counter(tasks)
-        heap = [-x for x in cnt.values()]
-        heapq.heapify(heap)
+        counter = Counter(tasks)
+        max_heap = [-x for x in counter.values()]
+        heapq.heapify(max_heap)
 
-        queue = deque()
+        queue = []
         timer = 0
 
-        while heap or queue:
+        while max_heap or queue:
             timer += 1
 
-            if heap:
-                count = 1 + heapq.heappop(heap)
-                if count:
-                    queue.append([count, timer + n])
-
+            if max_heap:
+                remain = 1 + heapq.heappop(max_heap)
+                if remain:
+                    queue.append([remain, timer + n])
+            
             if queue and queue[0][1] == timer:
-                heapq.heappush(heap, queue.popleft()[0])
-
+                heapq.heappush(max_heap, queue.pop(0)[0])
 
         return timer
 
