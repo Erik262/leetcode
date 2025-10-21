@@ -7,33 +7,33 @@ from typing import List
 # @lc code=start
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
-        res = []
+        result = []
         part = []
 
-        def dfs(j, i):
-            if i >= len(s):
+        def is_pali(l: int, r: int):
+            while l < r:
+                if s[l] != s[r]:
+                    return False
+                l += 1
+                r -= 1
+            return True
+
+        def dfs(i: int, j: int):
+            if j >= len(s):
                 if i == j:
-                    res.append(part.copy())
+                    result.append(part.copy())
                 return
-            
-            if self.pali(s, j, i):
-                part.append(s[j:i+1])
-                dfs(i+1, i+1)
+
+            if is_pali(i, j):
+                part.append(s[i:j+1])
+                dfs(j+1, j+1)
                 part.pop()
-            
-            dfs(j, i+1)
+
+            dfs(i, j+1)
 
         dfs(0,0)
-        return res
 
-    def pali(self, s, l , r):
-        while l < r:
-            if s[l] != s[r]:
-                return False
-            l += 1
-            r -= 1
-
-        return True
+        return result
 
 
 s = "aab" # [["a","a","b"],["aa","b"]]
