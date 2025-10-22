@@ -7,9 +7,7 @@ from typing import List
 # @lc code=start
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
-        res = []
-
-        hmap = {
+        keypad = {
             "2": "abc",
             "3": "def",
             "4": "ghi",
@@ -20,20 +18,17 @@ class Solution:
             "9": "wxyz"
         }
 
-        # buttons = [hmap[n] for n in digits]
-
-        def dfs(idx, s):
-            if len(s) == len(digits):
-                res.append(s)
+        result = []
+        def dfs(idx: int, prefix: List[str]):
+            if idx == len(digits):
+                result.append(prefix)
                 return
-            
-            for c in hmap[digits[idx]]:
-                dfs(idx + 1, s + c)
 
-        if digits:
-            dfs(0, "")
-        
-        return res
+            for c in keypad[digits[idx]]:
+                dfs(idx + 1, prefix + c)
+
+        dfs(0, "")
+        return result
     
     
 digits = "34" # ["dg","dh","di","eg","eh","ei","fg","fh","fi"]
