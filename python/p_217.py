@@ -1,15 +1,13 @@
 class Solution(object):
     def containsDuplicate(self, nums):
+        hmap = set()
 
-        h_map = {} # key : index
-
-        for idx, n in enumerate(nums):
-
-            if n in h_map:
+        for num in nums:
+            if num in hmap:
                 return True
-            
-            h_map[n] = idx
 
+            hmap.add(num)
+            
         return False
 
 nums = [1,2,3,0]
