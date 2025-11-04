@@ -10,36 +10,38 @@ class Solution:
         rows, cols = len(heights), len(heights[0])
         pacific = set()
         atlantic = set()
-        visited = set()
 
-        def dfs(i: int, j: int, visited: set, prevH: int):
+        def dfs(row, col, prev, ocean):
+            if (row, col) in ocean:
+                return
 
-            if i < 0 or i >= rows or j < 0 or j >= cols or (i,j) in visited or heights[i][j] < prevH:
+            if not (0 <= row < rows and 0 <= col < cols):
                 return
             
-            visited.add((i,j))
+            if prev > heights[row][col]:
+                return
 
-            dfs(i + 1, j, visited, heights[i][j])
-            dfs(i - 1, j, visited, heights[i][j])
-            dfs(i, j + 1, visited, heights[i][j])
-            dfs(i, j - 1, visited, heights[i][j])
+            ocean.add((row, col))
+            dfs(row, col + 1, heights[row][col], ocean) # right
+            dfs(row + 1, col, heights[row][col], ocean) # down
+            dfs(row, col - 1, heights[row][col], ocean) # left
+            dfs(row - 1, col, heights[row][col], ocean) # up
 
-            for col in range(cols):
-                dfs(0, col, pacific, heights[0][col])
-                dfs(rows - 1, col, atlantic, heights[rows - 1][col])
+        for row in range(rows):
+            dfs(row, 0, 0, pacific)
+            dfs(row, cols - 1, 0, atlantic)
+        
+        for col in range(cols):
+            dfs(0, col, 0, pacific)
+            dfs(rows - 1, col, 0, atlantic)
 
-            for row in range(rows):
-                dfs(row, 0, pacific, heights[row][0])
-                dfs(row, cols - 1, atlantic, heights[row][cols - 1])
-
-            result = []
-            for r in range(rows):
-                for c in range(cols):
-                    if (r,c) in pacific and (r,c) in atlantic:
-                        result.append([r,c])
-                
-            return result
-        return dfs(0, 0, visited, 0)
+        result = []
+        for r in range(rows):
+            for c in range(cols):
+                if (r,c) in pacific and (r,c) in atlantic:
+                    result.append([r,c])
+                    
+        return result
 
             
 
