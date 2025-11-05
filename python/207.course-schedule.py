@@ -1,4 +1,5 @@
 from typing import List
+from collections import defaultdict, deque
 # @lc app=leetcode id=207 lang=python3
 #
 # [207] Course Schedule
@@ -7,29 +8,30 @@ from typing import List
 # @lc code=start
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        pre_map = {i:[] for i in range(numCourses)}
-        visited = set()
+        graph = defaultdict(list)
+        in_degree = [0] * numCourses
 
-        for crs, pre in prerequisites:
-            pre_map[crs].append(pre)
-            
-        def dfs(crs):
-            if crs in visited: return False
-            if pre_map[crs] == []: return True
+        for a, b in prerequisites:
+            graph[b].append(a)
+            in_degree[a] += 1
 
-            visited.add(crs)
+        queue = deque()
+        for i in range(numCourses):
+            if in_degree[i] == 0:
+                queue.append(i)
 
-            for pre in pre_map[crs]:
-                if not dfs(pre): return False
+        taken_courses = 0
+        while queue:
+            course = queue.popleft()
+            taken_courses += 1
 
-            visited.remove(crs)
-            pre_map[crs] = []
+            for ngh in graph[course]:
+                in_degree[ngh] -= 1
 
-            return True
+                if in_degree[ngh] == 0:
+                    queue.append(ngh)
         
-        for crs in range(numCourses):
-            if not dfs(crs): return False
-        return True
+        return taken_courses == numCourses
 
 
 
