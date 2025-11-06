@@ -1,4 +1,5 @@
 from typing import List
+from collections import defaultdict
 # @lc app=leetcode id=684 lang=python3
 #
 # [684] Redundant Connection
@@ -7,37 +8,25 @@ from typing import List
 # @lc code=start
 class Solution:
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        n = len(edges)
-        parrent = [i for i in range(n + 1)]
-        rank = [1] * (n + 1)
+        graph = defaultdict(list)
 
-        def find(n):
-            if n != parrent[n]:
-                parrent[n] = find(parrent[n])
-            return parrent[n]
-        
-        def union(n1, n2):
-            p1 = find(n1)
-            p2 = find(n2)
+        def dfs(u, target, visited):
+            if u == target:
+                return True
+            visited.add(u)
 
-            if p1 == p2:
-                return False
-            
-            if rank[p1] > rank[p2]:
-                parrent[p2] = p1
-                rank[p1] += rank[p2]
-            else:
-                parrent[p1] = p2
-                rank[p2] += rank[p1]
+            for ngh in graph[u]:
+                if ngh not in visited and dfs(ngh, target, visited):
+                    return True
+            return False
 
-            return True
+        for u, v in edges:
+            visited = set()
 
-        for n1, n2 in edges:
-            if not union(n1, n2):
-                return [n1, n2]
-
-        
-
+            if u in graph and v in graph and dfs(u, v, visited):
+                return [u, v]
+            graph[u].append(v)
+            graph[v].append(u)
 
 
 edges = [[1,2],[1,3],[3,4],[2,4]] # [2,4]
@@ -46,4 +35,3 @@ edges = [[1,2],[1,3],[3,4],[2,4]] # [2,4]
 print(Solution().findRedundantConnection(edges))
         
 # @lc code=end
-
