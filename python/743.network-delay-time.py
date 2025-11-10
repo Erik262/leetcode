@@ -10,27 +10,29 @@ import math
 # @lc code=start
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        hmap = defaultdict(list)
-        dmap = {i: math.inf for i in range(1, n + 1)}
+        graph = defaultdict(list)
+        for u, v, w in times:
+            graph[u].append((v, w))
+        
+        minHeap = [(0, k)]
+        heapq.heapify(minHeap)
+        dist = {}
+        
+        while minHeap:
+            time, node = heapq.heappop(minHeap)
 
-        for u, v, t in times:
-            hmap[u].append((v, t))
+            if node in dist:
+                continue
 
-        def dfs(snode, time):
-            if time >= dmap[snode]:
-                return
+            dist[node] = time
 
-            dmap[snode] = time
-            for v, t in hmap[snode]:
-                dfs(v, time + t)
+            for ngh, w in graph[node]:
+                heapq.heappush(minHeap, (time + w, ngh))
 
-        dfs(k, 0)
-        result = max(dmap.values())
-
-        if result < math.inf:
-            return result
-        else:
-            return -1
+        if len(dist) == n:
+            return max(dist.values())
+            
+        return -1
 
 
 times = [[2,1,1],[2,3,1],[3,4,1]] # 2
