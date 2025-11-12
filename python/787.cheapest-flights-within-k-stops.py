@@ -10,31 +10,18 @@ import heapq
 # @lc code=start
 class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        hmap = {i: [] for i in range(n)}
-        minHeap = [(0, src, 0)]
-        heapq.heapify(minHeap)
-        visited = {}
+        cost = [float('inf')] * n
+        cost[src] = 0
 
-        for s, d, c in flights:
-            hmap[s].append([d, c])
+        for _ in range(k+1):
+            new_cost = cost.copy()
 
-        while minHeap:
-            cost, node, stops = heapq.heappop(minHeap)
+            for u, v, p in flights:
+                if cost[u] != float('inf') and cost[u] + p < new_cost[v]:
+                    new_cost[v] = cost[u] + p
+            cost = new_cost
 
-            if node == dst:
-                return cost
-            
-            if stops > k:
-                continue
-            
-            for nigh, cst in hmap[node]:
-                n_cost = cost + cst
-                key = (nigh, stops + 1)
-                if key not in visited or visited[key] > n_cost:
-                    visited[key] = n_cost
-                    heapq.heappush(minHeap, (n_cost, nigh, stops + 1))
-
-        return -1
+        return -1 if cost[dst] == float('inf') else cost[dst]
 
 
 n = 4
