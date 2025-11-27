@@ -14,24 +14,24 @@ class TreeNode:
 
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
-        self.pre_pos = 0
-        val_to_index = {val: idx for idx, val in enumerate(inorder)}
+        index_map = {val: idx for idx, val in enumerate(inorder)}
+        self.pre_idx = 0
 
         def dfs(l, r):
             if l == r:
                 return None
-            
-            root = preorder[self.pre_pos]
-            self.pre_pos += 1
+
+            root = preorder[self.pre_idx]
+            self.pre_idx += 1
 
             node = TreeNode(root)
-            mid = val_to_index[root]
+            mid_idx = index_map[root]
 
-            node.left = dfs(l, mid)
-            node.right = dfs(mid + 1, r)
+            node.left = dfs(l, mid_idx)
+            node.right = dfs(mid_idx + 1, r)
 
             return node
-        
+            
         return dfs(0, len(inorder))
 
 
