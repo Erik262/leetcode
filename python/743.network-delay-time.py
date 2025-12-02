@@ -11,27 +11,28 @@ import math
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
         graph = defaultdict(list)
+
         for u, v, w in times:
-            graph[u].append((v, w))
-        
-        minHeap = [(0, k)]
+            graph[u].append((v,w))
+
+        minHeap = [(0,k)]
         heapq.heapify(minHeap)
         dist = {}
-        
+
         while minHeap:
             time, node = heapq.heappop(minHeap)
-
+            
             if node in dist:
                 continue
-
+            
             dist[node] = time
 
-            for ngh, w in graph[node]:
-                heapq.heappush(minHeap, (time + w, ngh))
+            for v, w in graph[node]:
+                heapq.heappush(minHeap, (w + time, v))
 
         if len(dist) == n:
             return max(dist.values())
-            
+
         return -1
 
 
