@@ -12,29 +12,28 @@ import heapq
 class Solution:
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
         n = len(points)
-        in_mst = [False] * n
-        min_dist = [float('inf')] * n
-        min_dist[0] = 0
-        cost = 0
-        
-        for _ in range(n):
-            u = -1
-            min_cost = float('inf')
-            for i in range(n):
-                if not in_mst[i] and min_dist[i] < min_cost:
-                    min_cost = min_dist[i]
-                    u = i
+        visited = set()
+        min_heap = [(0, 0)] # (cost, node)
+        res = 0
+        heapq.heapify(min_heap)
 
-            in_mst[u] = True
-            cost += min_dist[u]
+        while len(visited) < n:
+            cost, node = heapq.heappop(min_heap)
 
-            for v in range(n):
-                if not in_mst[v]:
-                    dist = abs(points[u][0] - points[v][0]) + abs(points[u][1] - points[v][1])
-                    if dist < min_dist[v]:
-                        min_dist[v] = dist
+            if node in visited:
+                continue
 
-        return cost
+            visited.add(node)
+            res += cost
+
+            x1, y1 = points[node]
+            for ngh in range(n):
+                if ngh not in visited:
+                    x2, y2 = points[ngh]
+                    dist = abs(x1 - x2) + abs(y1 - y2)
+                    heapq.heappush(min_heap, (dist, ngh))
+
+        return res
 
 points = [[0,0],[2,2],[3,3],[2,4],[4,2]] # 10
 
