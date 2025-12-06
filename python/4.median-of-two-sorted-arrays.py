@@ -11,45 +11,31 @@ class Solution:
             nums1, nums2 = nums2, nums1
 
         m, n = len(nums1), len(nums2)
-        half = (m + n + 1) // 2
+        half = (m + n) // 2
 
-        low, high = 0, m
-        while low <= high:
-            i = (low + high) // 2
-            j = half - i
+        l, r = 0, m - 1
+        while True:
+            i = (l + r) // 2
+            j = half - i - 2
+            
+            left1 = nums1[i] if i >= 0 else float("-inf")
+            right1 = nums1[i+1] if i + 1 < m else float("inf")
+            left2 = nums2[j] if j >= 0 else float("-inf")
+            right2 = nums2[j+1] if j + 1 < n else float("inf")
 
-            if i == 0:
-                max_left_1 = float("-inf")
-            else:
-                max_left_1 = nums1[i-1]
-
-            if i == m:
-                min_right_1 = float("inf")
-            else:
-                min_right_1 = nums1[i]
-
-            if j == 0:
-                max_left_2 = float("-inf")
-            else:
-                max_left_2 = nums2[j-1]
-
-            if j == n:
-                min_right_2 = float("inf")
-            else:
-                min_right_2 = nums2[j]
-
-            if max_left_1 <= min_right_2 and max_left_2 <= min_right_1:
-                left_max = max(max_left_1, max_left_2)
+            if left1 <= right2 and left2 <= right1:
                 if (m + n) % 2 == 1:
-                    return float(left_max)
+                    return float(min(right1, right2))
 
-                right_min = min(min_right_1, min_right_2)
-                return (left_max + right_min) / 2.0
+                left_max = max(left1, left2)
+                right_min = min(right1, right2)
                 
-            elif max_left_1 > min_right_2:
-                high = i - 1
+                return (left_max + right_min) / 2.0
+
+            elif left1 > right2:
+                r = i - 1
             else:
-                low = i + 1
+                l = i + 1
 
 nums1 = [123, 2459, 789] # 270
 nums2 = [240, 300, 13]
