@@ -12,7 +12,6 @@ class Solution:
             return 0
         
         neigh = defaultdict(list)
-        wordList.append(beginWord)
 
         for word in wordList:
             for j in range(len(word)):
