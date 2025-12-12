@@ -11,7 +11,6 @@ class Solution:
     def findItinerary(self, tickets: List[List[str]]) -> List[str]:
         smap = defaultdict(list)
         result = []
-        tickets.reverse()
         tickets.sort(reverse=True)
 
         for f, t in tickets:
