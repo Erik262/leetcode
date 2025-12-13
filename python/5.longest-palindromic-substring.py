@@ -9,22 +9,20 @@ class Solution:
     def longestPalindrome(self, s: str) -> str:
         max_pali = ""
 
-        def expand(s, l, r):
+        def expand(s: str, l: int, r: int):
             while l >= 0 and r < len(s) and s[l] == s[r]:
                 l -= 1
                 r += 1
-
+            
             return s[l+1:r]
 
         for i in range(len(s)):
-            l1 = expand(s, i, i) # odd
-            l2 = expand(s, i, i + 1) # even
+            p1 = expand(s,i, i)
+            p2 = expand(s, i, i+1)
 
-            longest = l1 if len(l1) > len(l2) else l2
-
-            if len(longest) > len(max_pali):
-                max_pali = longest
-
+            longest = p1 if len(p1) > len(p2) else p2
+            max_pali = longest if len(longest) > len(max_pali) else max_pali
+        
         return max_pali
                  
 
