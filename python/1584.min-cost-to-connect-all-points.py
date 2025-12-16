@@ -15,9 +15,8 @@ class Solution:
         visited = set()
         min_heap = [(0, 0)] # (cost, node)
         res = 0
-        heapq.heapify(min_heap)
 
-        while len(visited) < n:
+        while min_heap:
             cost, node = heapq.heappop(min_heap)
 
             if node in visited:
