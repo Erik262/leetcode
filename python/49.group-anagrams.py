@@ -10,7 +10,7 @@ class Solution(object):
             else:
                 h_map[s_word] = [word]
             
-        return h_map.values()
+        return list(h_map.values())
         
 
 strs = ["eat","tea","tan","ate","nat","bat"]
