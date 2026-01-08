@@ -7,13 +7,12 @@ from typing import List
 # @lc code=start
 class Solution:
     def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
-        result = list(range(1, len(nums) + 1))
+        result = set(range(1, len(nums) + 1))
 
         for n in nums:
-            if n in result:
-                result.remove(n)
+            result.discard(n)
 
-        return result
+        return list(result)
     
 
 nums = [4,3,2,7,8,2,3,1]
